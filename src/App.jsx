@@ -2,6 +2,7 @@ import './App.css'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Home from './pages/Home'
 import Portfolio from './pages/Portfolio'
+import Services from './pages/Services'
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
             <ul className="nav-menu">
               <li><Link to="/">Home</Link></li>
               <li><Link to="/portfolio">Portfolio</Link></li>
-              <li><a href="#services">Services</a></li>
+              <li><Link to="/services">Services</Link></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
           </div>
@@ -27,6 +28,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/services" element={<Services />} />
         </Routes>
 
         <footer className="footer">
@@ -40,7 +42,7 @@ function App() {
               <ul>
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/portfolio">Portfolio</Link></li>
-                <li><a href="#services">Services</a></li>
+                <li><Link to="/services">Services</Link></li>
                 <li><a href="#contact">Contact</a></li>
               </ul>
             </div>
