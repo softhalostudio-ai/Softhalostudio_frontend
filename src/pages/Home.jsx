@@ -1,10 +1,36 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import portfolioPic1 from '../assets/portfolio_pic_1.jpg'
-import portfolioPic2 from '../assets/portfolio_pic_2.jpg'
-import portfolioPic3 from '../assets/portfolio_pic_3.jpg'
-import portfolioPic4 from '../assets/portfolio_pic_4.jpg'
+
+const API_URL = `${import.meta.env.VITE_API_URL}/images`;
 
 function Home() {
+  const [landingImages, setLandingImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchLandingImages();
+  }, []);
+
+  const fetchLandingImages = async () => {
+    try {
+      const response = await fetch(`${API_URL}?category=landing_page`);
+      const data = await response.json();
+
+      if (data.success && data.images.length > 0) {
+        setLandingImages(data.images);
+      }
+    } catch (error) {
+      console.error('Error fetching images:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Duplicate images for infinite scroll effect
+  const carouselImages = landingImages.length > 0
+    ? [...landingImages, ...landingImages]
+    : [];
+
   return (
     <>
       <main className="hero" id="home">
@@ -47,34 +73,23 @@ function Home() {
       <section className="portfolio-section">
         <div className="portfolio-container">
           <h2 className="portfolio-title">Our Work</h2>
-          <div className="portfolio-carousel">
-            <div className="portfolio-track">
-              <div className="portfolio-item">
-                <img src={portfolioPic1} alt="Portfolio 1" />
-              </div>
-              <div className="portfolio-item">
-                <img src={portfolioPic2} alt="Portfolio 2" />
-              </div>
-              <div className="portfolio-item">
-                <img src={portfolioPic3} alt="Portfolio 3" />
-              </div>
-              <div className="portfolio-item">
-                <img src={portfolioPic4} alt="Portfolio 4" />
-              </div>
-              <div className="portfolio-item">
-                <img src={portfolioPic1} alt="Portfolio 1" />
-              </div>
-              <div className="portfolio-item">
-                <img src={portfolioPic2} alt="Portfolio 2" />
-              </div>
-              <div className="portfolio-item">
-                <img src={portfolioPic3} alt="Portfolio 3" />
-              </div>
-              <div className="portfolio-item">
-                <img src={portfolioPic4} alt="Portfolio 4" />
+          {loading ? (
+            <div className="loading">Loading images...</div>
+          ) : landingImages.length === 0 ? (
+            <div className="empty-state">
+              <p>No images available. Upload images from the admin panel.</p>
+            </div>
+          ) : (
+            <div className="portfolio-carousel">
+              <div className="portfolio-track">
+                {carouselImages.map((image, index) => (
+                  <div key={index} className="portfolio-item">
+                    <img src={image.url} alt={image.title || `Image ${index + 1}`} />
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
     </>

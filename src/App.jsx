@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import Portfolio from './pages/Portfolio'
 import Services from './pages/Services'
 import Contact from './pages/Contact'
+import Admin from './pages/Admin'
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
 
         <footer className="footer">
