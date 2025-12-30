@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Home from './pages/Home'
 import Portfolio from './pages/Portfolio'
 import Services from './pages/Services'
+import Contact from './pages/Contact'
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
               <li><Link to="/">Home</Link></li>
               <li><Link to="/portfolio">Portfolio</Link></li>
               <li><Link to="/services">Services</Link></li>
-              <li><a href="#contact">Contact</a></li>
+              <li><Link to="/contact">Contact</Link></li>
             </ul>
           </div>
         </nav>
@@ -29,6 +30,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
 
         <footer className="footer">
@@ -43,7 +45,7 @@ function App() {
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/portfolio">Portfolio</Link></li>
                 <li><Link to="/services">Services</Link></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><Link to="/contact">Contact</Link></li>
               </ul>
             </div>
             <div className="footer-section">
