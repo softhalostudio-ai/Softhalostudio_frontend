@@ -19,7 +19,7 @@ function Home() {
             </p>
             <div className="hero-buttons">
               <Link to="/portfolio" className="btn btn-primary">View Portfolio</Link>
-              <button className="btn btn-secondary">Get in Touch</button>
+              <Link to="/contact" className="btn btn-secondary">Get in Touch</Link>
             </div>
           </div>
         </div>
