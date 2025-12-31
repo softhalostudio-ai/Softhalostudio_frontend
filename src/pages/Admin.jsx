@@ -29,6 +29,7 @@ export default function Admin() {
   });
 
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [activeSection, setActiveSection] = useState('media'); // 'dashboard' or 'media'
 
   useEffect(() => {
     fetchImages();
@@ -213,13 +214,19 @@ export default function Admin() {
         <nav className="sidebar-nav">
           <div className="nav-section">
             <h3>MENU</h3>
-            <button className="nav-item active">
+            <button
+              className={`nav-item ${activeSection === 'dashboard' ? 'active' : ''}`}
+              onClick={() => setActiveSection('dashboard')}
+            >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
               </svg>
               Dashboard
             </button>
-            <button className="nav-item">
+            <button
+              className={`nav-item ${activeSection === 'media' ? 'active' : ''}`}
+              onClick={() => setActiveSection('media')}
+            >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
               </svg>
@@ -243,8 +250,8 @@ export default function Admin() {
         {/* Top Bar */}
         <header className="admin-topbar">
           <div className="topbar-left">
-            <h1>Media Management</h1>
-            <p>Upload and organize your portfolio images</p>
+            <h1>{activeSection === 'dashboard' ? 'Dashboard' : 'Media Management'}</h1>
+            <p>{activeSection === 'dashboard' ? 'Overview of your content and statistics' : 'Upload and organize your portfolio images'}</p>
           </div>
           <div className="topbar-right">
             <div className="user-info">
@@ -269,6 +276,62 @@ export default function Admin() {
           </div>
         )}
 
+        {activeSection === 'dashboard' ? (
+          <div className="dashboard-content">
+            <div className="stats-grid">
+              <div className="stat-card">
+                <div className="stat-icon">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                  </svg>
+                </div>
+                <div className="stat-info">
+                  <h3>Total Images</h3>
+                  <p className="stat-number">{images.length}</p>
+                </div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-icon">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                  </svg>
+                </div>
+                <div className="stat-info">
+                  <h3>Landing Page</h3>
+                  <p className="stat-number">{images.filter(img => img.category === 'landing_page').length}</p>
+                </div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-icon">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/>
+                  </svg>
+                </div>
+                <div className="stat-info">
+                  <h3>Portfolio</h3>
+                  <p className="stat-number">{images.filter(img => img.category === 'portfolio').length}</p>
+                </div>
+              </div>
+            </div>
+            <div className="dashboard-section">
+              <h2>Quick Actions</h2>
+              <div className="quick-actions">
+                <button onClick={() => setActiveSection('media')} className="action-btn">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                  </svg>
+                  Upload New Image
+                </button>
+                <button onClick={() => setActiveSection('media')} className="action-btn">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                  </svg>
+                  Manage Media
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
         <div className="admin-content">
         <div className="upload-section">
           <h2>Upload New Image</h2>
@@ -478,6 +541,7 @@ export default function Admin() {
           )}
         </div>
         </div>
+        )}
       </div>
     </div>
     </div>
