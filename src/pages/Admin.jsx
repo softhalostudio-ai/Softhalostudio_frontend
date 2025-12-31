@@ -493,8 +493,8 @@ export default function Admin() {
 
         <div className="images-section">
           <div className="section-header">
-            <div className="header-left">
-              <h2>Uploaded Images</h2>
+            <h2>Uploaded Images</h2>
+            <div className="header-actions">
               <div className="category-tabs">
                 <button
                   onClick={() => setActiveTab('landing_page')}
@@ -509,8 +509,6 @@ export default function Admin() {
                   Portfolio
                 </button>
               </div>
-            </div>
-            <div className="header-actions">
               <div className="view-toggle">
                 <button
                   onClick={() => setViewMode('grid')}
