@@ -202,24 +202,74 @@ export default function Admin() {
   };
 
   return (
-    <div className="admin-container">
-      <div className="admin-header">
-        <div>
-          <h1>Admin Panel</h1>
-          <p>Upload and manage portfolio images</p>
+    <div className="admin-dashboard">
+      {/* Sidebar */}
+      <aside className="admin-sidebar">
+        <div className="sidebar-header">
+          <h2>Soft Halo</h2>
+          <span className="sidebar-subtitle">STUDIO</span>
         </div>
-        <button onClick={() => { logout(); navigate('/login'); }} className="btn-logout">
-          Logout
-        </button>
-      </div>
 
-      {message.text && (
-        <div className={`message ${message.type}`}>
-          {message.text}
+        <nav className="sidebar-nav">
+          <div className="nav-section">
+            <h3>MENU</h3>
+            <button className="nav-item active">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+              </svg>
+              Dashboard
+            </button>
+            <button className="nav-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+              </svg>
+              Media Library
+            </button>
+          </div>
+        </nav>
+
+        <div className="sidebar-footer">
+          <button onClick={() => { logout(); navigate('/login'); }} className="sidebar-logout">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+            </svg>
+            Logout
+          </button>
         </div>
-      )}
+      </aside>
 
-      <div className="admin-content">
+      {/* Main Content */}
+      <div className="admin-main">
+        {/* Top Bar */}
+        <header className="admin-topbar">
+          <div className="topbar-left">
+            <h1>Media Management</h1>
+            <p>Upload and organize your portfolio images</p>
+          </div>
+          <div className="topbar-right">
+            <div className="user-info">
+              <div className="user-avatar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+              </div>
+              <div className="user-details">
+                <span className="user-email">{getAuthHeader().Authorization ? 'Admin' : 'Guest'}</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Content Area */}
+        <div className="admin-content-wrapper">
+
+        {message.text && (
+          <div className={`message ${message.type}`}>
+            {message.text}
+          </div>
+        )}
+
+        <div className="admin-content">
         <div className="upload-section">
           <h2>Upload New Image</h2>
           <form onSubmit={handleSubmit} className="upload-form">
@@ -424,6 +474,7 @@ export default function Admin() {
               ))}
             </div>
           )}
+          </div>
         </div>
       </div>
     </div>
