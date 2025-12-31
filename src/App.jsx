@@ -24,12 +24,13 @@ function PageTracker() {
   return null;
 }
 
-function App() {
+function AppContent() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname === '/admin' || location.pathname === '/login';
+
   return (
-    <AuthProvider>
-      <Router>
-        <PageTracker />
-        <div className="app">
+    <div className="app">
+      {!isAdminRoute && (
         <nav className="navbar">
           <div className="nav-container">
             <Link to="/" className="logo">
@@ -46,8 +47,9 @@ function App() {
             </ul>
           </div>
         </nav>
+      )}
 
-        <Routes>
+      <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/services" element={<Services />} />
@@ -61,8 +63,9 @@ function App() {
               </ProtectedRoute>
             }
           />
-        </Routes>
+      </Routes>
 
+      {!isAdminRoute && (
         <footer className="footer">
           <div className="footer-content">
             <div className="footer-section">
@@ -97,7 +100,17 @@ function App() {
             <p>&copy; 2025 Soft Halo Studio. All rights reserved.</p>
           </div>
         </footer>
-        </div>
+      )}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <PageTracker />
+        <AppContent />
       </Router>
     </AuthProvider>
   )
