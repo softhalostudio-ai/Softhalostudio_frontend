@@ -117,10 +117,24 @@ export default function Admin() {
     }
 
     try {
+      console.log('Deleting image:', id);
+      console.log('API URL:', `${API_URL}/${id}`);
+      console.log('Auth headers:', getAuthHeader());
+
       const response = await fetch(`${API_URL}/${id}`, {
         method: 'DELETE',
         headers: getAuthHeader()
       });
+
+      console.log('Delete response status:', response.status);
+      console.log('Delete response headers:', response.headers);
+
+      if (!response.ok) {
+        const text = await response.text();
+        console.error('Delete failed with status:', response.status, 'Body:', text);
+        showMessage(`Delete failed: ${response.status} ${response.statusText}`, 'error');
+        return;
+      }
 
       const data = await response.json();
 
@@ -132,7 +146,7 @@ export default function Admin() {
       }
     } catch (error) {
       console.error('Delete error:', error);
-      showMessage('Failed to delete image', 'error');
+      showMessage('Failed to delete image: ' + error.message, 'error');
     }
   };
 
