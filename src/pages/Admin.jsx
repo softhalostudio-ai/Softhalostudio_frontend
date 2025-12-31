@@ -81,6 +81,33 @@ export default function Admin() {
     }
   };
 
+  const deleteMessage = async (id) => {
+    if (!confirm('Are you sure you want to delete this message? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/contact/messages`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeader(),
+        },
+        body: JSON.stringify({ id }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        showMessage('Message deleted successfully', 'success');
+        fetchMessages();
+      } else {
+        showMessage('Failed to delete message', 'error');
+      }
+    } catch (error) {
+      console.error('Error deleting message:', error);
+      showMessage('Failed to delete message', 'error');
+    }
+  };
+
   const fetchImages = async () => {
     setLoading(true);
     try {
@@ -496,11 +523,16 @@ export default function Admin() {
                     <div className="message-body">
                       <p>{msg.message}</p>
                     </div>
-                    {!msg.read && (
-                      <button onClick={() => markAsRead(msg.id)} className="btn-mark-read">
-                        Mark as Read
+                    <div className="message-actions">
+                      {!msg.read && (
+                        <button onClick={() => markAsRead(msg.id)} className="btn-mark-read">
+                          Mark as Read
+                        </button>
+                      )}
+                      <button onClick={() => deleteMessage(msg.id)} className="btn-delete-message">
+                        Delete
                       </button>
-                    )}
+                    </div>
                   </div>
                 ))}
               </div>

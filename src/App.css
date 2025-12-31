@@ -2049,6 +2049,14 @@
   color: #333;
 }
 
+.message-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
 .btn-mark-read {
   background: #26a69a;
   color: white;
@@ -2062,6 +2070,22 @@
 
 .btn-mark-read:hover {
   background: #1e8e86;
+}
+
+.btn-delete-message {
+  background: #dc3545;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: auto;
+}
+
+.btn-delete-message:hover {
+  background: #c82333;
 }
 
 /* Responsive Design */
