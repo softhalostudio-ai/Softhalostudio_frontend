@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const API_URL = `${import.meta.env.VITE_API_URL}/images`;
 
@@ -339,6 +339,12 @@ export default function Admin() {
                 <span className="message-badge">{messages.filter(m => !m.read).length}</span>
               )}
             </button>
+            <Link to="/" className="nav-item nav-link">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z"/>
+              </svg>
+              Back to Website
+            </Link>
           </div>
         </nav>
 
