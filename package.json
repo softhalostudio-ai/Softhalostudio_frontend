@@ -13,6 +13,7 @@
     "vercel-build": "prisma generate && vite build"
   },
   "dependencies": {
+    "@google-analytics/data": "^5.2.1",
     "@prisma/client": "^6.19.1",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.8.0",

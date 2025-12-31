@@ -33,6 +33,8 @@ export default function Admin() {
   const [activeTab, setActiveTab] = useState('landing_page'); // 'landing_page' or 'portfolio'
   const [messages, setMessages] = useState([]);
   const [loadingMessages, setLoadingMessages] = useState(false);
+  const [analytics, setAnalytics] = useState(null);
+  const [loadingAnalytics, setLoadingAnalytics] = useState(false);
 
   useEffect(() => {
     fetchImages();
@@ -41,6 +43,9 @@ export default function Admin() {
   useEffect(() => {
     if (activeSection === 'messages') {
       fetchMessages();
+    }
+    if (activeSection === 'dashboard') {
+      fetchAnalytics();
     }
   }, [activeSection]);
 
@@ -59,6 +64,23 @@ export default function Admin() {
       showMessage('Failed to fetch messages', 'error');
     } finally {
       setLoadingMessages(false);
+    }
+  };
+
+  const fetchAnalytics = async () => {
+    setLoadingAnalytics(true);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/analytics/stats`, {
+        headers: getAuthHeader(),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setAnalytics(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching analytics:', error);
+    } finally {
+      setLoadingAnalytics(false);
     }
   };
 
@@ -410,8 +432,10 @@ export default function Admin() {
                   </div>
                   <div className="analytics-info">
                     <h4>Page Views (30d)</h4>
-                    <p className="analytics-number">-</p>
-                    <span className="analytics-note">Connect GA to view</span>
+                    <p className="analytics-number">
+                      {loadingAnalytics ? '...' : analytics ? analytics.pageViews30d.toLocaleString() : '-'}
+                    </p>
+                    {!analytics && <span className="analytics-note">Connect GA to view</span>}
                   </div>
                 </div>
                 <div className="analytics-card">
@@ -422,8 +446,10 @@ export default function Admin() {
                   </div>
                   <div className="analytics-info">
                     <h4>Past Page Views</h4>
-                    <p className="analytics-number">-</p>
-                    <span className="analytics-note">Connect GA to view</span>
+                    <p className="analytics-number">
+                      {loadingAnalytics ? '...' : analytics ? analytics.pastPageViews.toLocaleString() : '-'}
+                    </p>
+                    {!analytics && <span className="analytics-note">Connect GA to view</span>}
                   </div>
                 </div>
                 <div className="analytics-card">
@@ -434,8 +460,10 @@ export default function Admin() {
                   </div>
                   <div className="analytics-info">
                     <h4>Total Visits (All Time)</h4>
-                    <p className="analytics-number">-</p>
-                    <span className="analytics-note">Connect GA to view</span>
+                    <p className="analytics-number">
+                      {loadingAnalytics ? '...' : analytics ? analytics.totalVisitsAllTime.toLocaleString() : '-'}
+                    </p>
+                    {!analytics && <span className="analytics-note">Connect GA to view</span>}
                   </div>
                 </div>
                 <div className="analytics-card">
@@ -446,8 +474,10 @@ export default function Admin() {
                   </div>
                   <div className="analytics-info">
                     <h4>Unique Visitors</h4>
-                    <p className="analytics-number">-</p>
-                    <span className="analytics-note">Connect GA to view</span>
+                    <p className="analytics-number">
+                      {loadingAnalytics ? '...' : analytics ? analytics.uniqueVisitors.toLocaleString() : '-'}
+                    </p>
+                    {!analytics && <span className="analytics-note">Connect GA to view</span>}
                   </div>
                 </div>
                 <div className="analytics-card">
@@ -458,8 +488,10 @@ export default function Admin() {
                   </div>
                   <div className="analytics-info">
                     <h4>Avg Session Duration</h4>
-                    <p className="analytics-number">-</p>
-                    <span className="analytics-note">Connect GA to view</span>
+                    <p className="analytics-number">
+                      {loadingAnalytics ? '...' : analytics ? `${Math.floor(analytics.avgSessionDuration / 60)}m ${analytics.avgSessionDuration % 60}s` : '-'}
+                    </p>
+                    {!analytics && <span className="analytics-note">Connect GA to view</span>}
                   </div>
                 </div>
                 <div className="analytics-card">
@@ -470,8 +502,10 @@ export default function Admin() {
                   </div>
                   <div className="analytics-info">
                     <h4>Bounce Rate</h4>
-                    <p className="analytics-number">-</p>
-                    <span className="analytics-note">Connect GA to view</span>
+                    <p className="analytics-number">
+                      {loadingAnalytics ? '...' : analytics ? `${analytics.bounceRate}%` : '-'}
+                    </p>
+                    {!analytics && <span className="analytics-note">Connect GA to view</span>}
                   </div>
                 </div>
               </div>
