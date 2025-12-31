@@ -332,6 +332,30 @@ export default function Admin() {
                 <div className="analytics-card">
                   <div className="analytics-icon">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/>
+                    </svg>
+                  </div>
+                  <div className="analytics-info">
+                    <h4>Past Page Views</h4>
+                    <p className="analytics-number">-</p>
+                    <span className="analytics-note">Connect GA to view</span>
+                  </div>
+                </div>
+                <div className="analytics-card">
+                  <div className="analytics-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9c.83 0 1.5-.67 1.5-1.5S7.83 8 7 8s-1.5.67-1.5 1.5S6.17 11 7 11zm10 0c.83 0 1.5-.67 1.5-1.5S17.83 8 17 8s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-5 6c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                    </svg>
+                  </div>
+                  <div className="analytics-info">
+                    <h4>Total Visits (All Time)</h4>
+                    <p className="analytics-number">-</p>
+                    <span className="analytics-note">Connect GA to view</span>
+                  </div>
+                </div>
+                <div className="analytics-card">
+                  <div className="analytics-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
                     </svg>
                   </div>
