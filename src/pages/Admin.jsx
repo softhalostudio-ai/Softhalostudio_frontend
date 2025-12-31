@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const API_URL = `${import.meta.env.VITE_API_URL}/images`;
 
 export default function Admin() {
+  const { getAuthHeader, logout } = useAuth();
+  const navigate = useNavigate();
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -79,6 +83,7 @@ export default function Admin() {
     try {
       const response = await fetch(`${API_URL}/upload`, {
         method: 'POST',
+        headers: getAuthHeader(),
         body: uploadFormData
       });
 
@@ -113,7 +118,8 @@ export default function Admin() {
 
     try {
       const response = await fetch(`${API_URL}/${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: getAuthHeader()
       });
 
       const data = await response.json();
@@ -160,7 +166,8 @@ export default function Admin() {
       const response = await fetch(`${API_URL}/${id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...getAuthHeader()
         },
         body: JSON.stringify(editData)
       });
@@ -183,8 +190,13 @@ export default function Admin() {
   return (
     <div className="admin-container">
       <div className="admin-header">
-        <h1>Admin Panel</h1>
-        <p>Upload and manage portfolio images</p>
+        <div>
+          <h1>Admin Panel</h1>
+          <p>Upload and manage portfolio images</p>
+        </div>
+        <button onClick={() => { logout(); navigate('/login'); }} className="btn-logout">
+          Logout
+        </button>
       </div>
 
       {message.text && (

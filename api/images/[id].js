@@ -1,7 +1,8 @@
 import { prisma } from '../lib/prisma.js';
 import cloudinary from '../lib/cloudinary.js';
+import { requireAuth } from '../lib/auth.js';
 
-export default async function handler(req, res) {
+async function imageHandler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -83,5 +84,14 @@ export default async function handler(req, res) {
     }
   } else {
     res.status(405).json({ error: 'Method not allowed' });
+  }
+}
+
+// Protect PUT and DELETE, allow GET without auth
+export default async function handler(req, res) {
+  if (req.method === 'GET') {
+    return imageHandler(req, res);
+  } else {
+    return requireAuth(imageHandler)(req, res);
   }
 }

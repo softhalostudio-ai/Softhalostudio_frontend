@@ -5,11 +5,15 @@ import Portfolio from './pages/Portfolio'
 import Services from './pages/Services'
 import Contact from './pages/Contact'
 import Admin from './pages/Admin'
+import Login from './pages/Login'
+import ProtectedRoute from './components/ProtectedRoute'
+import { AuthProvider } from './context/AuthContext'
 
 function App() {
   return (
-    <Router>
-      <div className="app">
+    <AuthProvider>
+      <Router>
+        <div className="app">
         <nav className="navbar">
           <div className="nav-container">
             <Link to="/" className="logo">
@@ -32,7 +36,15 @@ function App() {
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
 
         <footer className="footer">
@@ -69,8 +81,9 @@ function App() {
             <p>&copy; 2025 Soft Halo Studio. All rights reserved.</p>
           </div>
         </footer>
-      </div>
-    </Router>
+        </div>
+      </Router>
+    </AuthProvider>
   )
 }
 

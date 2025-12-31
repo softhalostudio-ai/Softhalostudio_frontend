@@ -1,6 +1,7 @@
 import { prisma } from '../lib/prisma.js';
 import cloudinary from '../lib/cloudinary.js';
 import multiparty from 'multiparty';
+import { requireAuth } from '../lib/auth.js';
 
 export const config = {
   api: {
@@ -8,7 +9,7 @@ export const config = {
   },
 };
 
-export default async function handler(req, res) {
+async function uploadHandler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -71,3 +72,5 @@ export default async function handler(req, res) {
     res.status(405).json({ error: 'Method not allowed' });
   }
 }
+
+export default requireAuth(uploadHandler);
