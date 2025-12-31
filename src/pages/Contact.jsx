@@ -25,6 +25,9 @@ function Contact() {
     setSubmitting(true)
     setSubmitMessage({ text: '', type: '' })
 
+    console.log('Submitting to:', `${API_URL}/submit`)
+    console.log('Form data:', formData)
+
     try {
       const response = await fetch(`${API_URL}/submit`, {
         method: 'POST',
@@ -34,11 +37,19 @@ function Contact() {
         body: JSON.stringify(formData),
       })
 
+      console.log('Response status:', response.status)
+      console.log('Response ok:', response.ok)
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
       const data = await response.json()
+      console.log('Response data:', data)
 
       if (data.success) {
         setSubmitMessage({
-          text: 'Message sent successfully! We will get back to you soon.',
+          text: 'SUCCESS! Your message has been sent. We will get back to you soon!',
           type: 'success'
         })
         setFormData({
@@ -48,6 +59,10 @@ function Contact() {
           service: '',
           message: ''
         })
+        // Auto-hide success message after 5 seconds
+        setTimeout(() => {
+          setSubmitMessage({ text: '', type: '' })
+        }, 5000)
       } else {
         setSubmitMessage({
           text: data.error || 'Failed to send message. Please try again.',
@@ -57,7 +72,7 @@ function Contact() {
     } catch (error) {
       console.error('Error submitting form:', error)
       setSubmitMessage({
-        text: 'Failed to send message. Please try again later.',
+        text: `Failed to send message: ${error.message}. Please try again later.`,
         type: 'error'
       })
     } finally {
