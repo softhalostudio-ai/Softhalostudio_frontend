@@ -30,6 +30,7 @@ export default function Admin() {
 
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
   const [activeSection, setActiveSection] = useState('media'); // 'dashboard' or 'media'
+  const [activeTab, setActiveTab] = useState('landing_page'); // 'landing_page' or 'portfolio'
 
   useEffect(() => {
     fetchImages();
@@ -492,7 +493,23 @@ export default function Admin() {
 
         <div className="images-section">
           <div className="section-header">
-            <h2>Uploaded Images</h2>
+            <div className="header-left">
+              <h2>Uploaded Images</h2>
+              <div className="category-tabs">
+                <button
+                  onClick={() => setActiveTab('landing_page')}
+                  className={`tab-btn ${activeTab === 'landing_page' ? 'active' : ''}`}
+                >
+                  Landing Page
+                </button>
+                <button
+                  onClick={() => setActiveTab('portfolio')}
+                  className={`tab-btn ${activeTab === 'portfolio' ? 'active' : ''}`}
+                >
+                  Portfolio
+                </button>
+              </div>
+            </div>
             <div className="header-actions">
               <div className="view-toggle">
                 <button
@@ -522,13 +539,13 @@ export default function Admin() {
 
           {loading ? (
             <div className="loading">Loading images...</div>
-          ) : images.length === 0 ? (
+          ) : images.filter(img => img.category === activeTab).length === 0 ? (
             <div className="empty-state">
-              <p>No images uploaded yet</p>
+              <p>No images in this category yet</p>
             </div>
           ) : (
             <div className={viewMode === 'grid' ? 'images-grid' : 'images-list'}>
-              {images.map((image) => (
+              {images.filter(img => img.category === activeTab).map((image) => (
                 <div key={image.id} className={viewMode === 'grid' ? 'image-card' : 'image-list-item'}>
                   <div className="image-wrapper">
                     <img src={image.url} alt={image.title || 'Uploaded image'} />
