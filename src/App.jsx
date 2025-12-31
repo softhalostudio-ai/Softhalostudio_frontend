@@ -15,7 +15,7 @@ function PageTracker() {
 
   useEffect(() => {
     if (typeof window.gtag !== 'undefined') {
-      window.gtag('config', 'G-XXXXXXXXXX', {
+      window.gtag('config', 'G-HVKKYC5N1L', {
         page_path: location.pathname + location.search,
       });
     }
