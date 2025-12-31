@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+const API_URL = `${import.meta.env.VITE_API_URL}/contact`;
+
 function Contact() {
   const [formData, setFormData] = useState({
     name: '',
@@ -8,6 +10,8 @@ function Contact() {
     service: '',
     message: ''
   })
+  const [submitting, setSubmitting] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState({ text: '', type: '' })
 
   const handleChange = (e) => {
     setFormData({
@@ -16,10 +20,49 @@ function Contact() {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Form submitted:', formData)
-    // Handle form submission here
+    setSubmitting(true)
+    setSubmitMessage({ text: '', type: '' })
+
+    try {
+      const response = await fetch(`${API_URL}/submit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setSubmitMessage({
+          text: 'Message sent successfully! We will get back to you soon.',
+          type: 'success'
+        })
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          service: '',
+          message: ''
+        })
+      } else {
+        setSubmitMessage({
+          text: data.error || 'Failed to send message. Please try again.',
+          type: 'error'
+        })
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      setSubmitMessage({
+        text: 'Failed to send message. Please try again later.',
+        type: 'error'
+      })
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -62,6 +105,11 @@ function Contact() {
         </div>
 
         <form className="contact-form" onSubmit={handleSubmit}>
+          {submitMessage.text && (
+            <div className={`form-message ${submitMessage.type}`}>
+              {submitMessage.text}
+            </div>
+          )}
           <div className="form-group">
             <label htmlFor="name">Name *</label>
             <input
@@ -127,7 +175,9 @@ function Contact() {
             ></textarea>
           </div>
 
-          <button type="submit" className="submit-btn">SEND MESSAGE</button>
+          <button type="submit" className="submit-btn" disabled={submitting}>
+            {submitting ? 'SENDING...' : 'SEND MESSAGE'}
+          </button>
         </form>
       </div>
     </div>

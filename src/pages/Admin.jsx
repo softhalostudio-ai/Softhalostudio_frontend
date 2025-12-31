@@ -29,12 +29,57 @@ export default function Admin() {
   });
 
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
-  const [activeSection, setActiveSection] = useState('media'); // 'dashboard' or 'media'
+  const [activeSection, setActiveSection] = useState('media'); // 'dashboard', 'media', or 'messages'
   const [activeTab, setActiveTab] = useState('landing_page'); // 'landing_page' or 'portfolio'
+  const [messages, setMessages] = useState([]);
+  const [loadingMessages, setLoadingMessages] = useState(false);
 
   useEffect(() => {
     fetchImages();
   }, []);
+
+  useEffect(() => {
+    if (activeSection === 'messages') {
+      fetchMessages();
+    }
+  }, [activeSection]);
+
+  const fetchMessages = async () => {
+    setLoadingMessages(true);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/contact/messages`, {
+        headers: getAuthHeader(),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setMessages(data.messages);
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      showMessage('Failed to fetch messages', 'error');
+    } finally {
+      setLoadingMessages(false);
+    }
+  };
+
+  const markAsRead = async (id) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/contact/messages`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeader(),
+        },
+        body: JSON.stringify({ id }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        fetchMessages();
+      }
+    } catch (error) {
+      console.error('Error marking message as read:', error);
+    }
+  };
 
   const fetchImages = async () => {
     setLoading(true);
@@ -233,6 +278,18 @@ export default function Admin() {
               </svg>
               Media Library
             </button>
+            <button
+              className={`nav-item ${activeSection === 'messages' ? 'active' : ''}`}
+              onClick={() => setActiveSection('messages')}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+              </svg>
+              Messages
+              {messages.filter(m => !m.read).length > 0 && (
+                <span className="message-badge">{messages.filter(m => !m.read).length}</span>
+              )}
+            </button>
           </div>
         </nav>
 
@@ -251,8 +308,8 @@ export default function Admin() {
         {/* Top Bar */}
         <header className="admin-topbar">
           <div className="topbar-left">
-            <h1>{activeSection === 'dashboard' ? 'Dashboard' : 'Media Management'}</h1>
-            <p>{activeSection === 'dashboard' ? 'Overview of your content and statistics' : 'Upload and organize your portfolio images'}</p>
+            <h1>{activeSection === 'dashboard' ? 'Dashboard' : activeSection === 'messages' ? 'Messages' : 'Media Management'}</h1>
+            <p>{activeSection === 'dashboard' ? 'Overview of your content and statistics' : activeSection === 'messages' ? 'View and manage contact form submissions' : 'Upload and organize your portfolio images'}</p>
           </div>
           <div className="topbar-right">
             <div className="user-info">
@@ -409,6 +466,45 @@ export default function Admin() {
                 </button>
               </div>
             </div>
+          </div>
+        ) : activeSection === 'messages' ? (
+          <div className="messages-content">
+            {loadingMessages ? (
+              <div className="loading">Loading messages...</div>
+            ) : messages.length === 0 ? (
+              <div className="empty-state">
+                <p>No messages yet</p>
+              </div>
+            ) : (
+              <div className="messages-list">
+                {messages.map((msg) => (
+                  <div key={msg.id} className={`message-card ${msg.read ? 'read' : 'unread'}`}>
+                    <div className="message-header">
+                      <div className="message-from">
+                        <h3>{msg.name}</h3>
+                        <span className="message-email">{msg.email}</span>
+                      </div>
+                      <div className="message-meta">
+                        <span className="message-date">{new Date(msg.createdAt).toLocaleDateString()}</span>
+                        {!msg.read && <span className="unread-indicator">New</span>}
+                      </div>
+                    </div>
+                    <div className="message-details">
+                      {msg.phone && <p><strong>Phone:</strong> {msg.phone}</p>}
+                      {msg.service && <p><strong>Service:</strong> {msg.service}</p>}
+                    </div>
+                    <div className="message-body">
+                      <p>{msg.message}</p>
+                    </div>
+                    {!msg.read && (
+                      <button onClick={() => markAsRead(msg.id)} className="btn-mark-read">
+                        Mark as Read
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ) : (
         <div className="admin-content">
