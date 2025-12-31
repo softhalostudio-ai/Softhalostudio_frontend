@@ -1,8 +1,11 @@
+import { Link } from 'react-router-dom'
+
 function Services() {
   const services = [
     {
       id: 1,
       title: 'Event Photography',
+      serviceValue: 'event-photography',
       description: 'Professional coverage of your special events, from intimate gatherings to large celebrations.',
       features: [
         'Full event coverage',
@@ -14,6 +17,7 @@ function Services() {
     {
       id: 2,
       title: 'Event Videography',
+      serviceValue: 'event-videography',
       description: 'Cinematic video production that captures the emotion and energy of your event.',
       features: [
         'Multi-camera coverage',
@@ -25,6 +29,7 @@ function Services() {
     {
       id: 3,
       title: 'Wedding Packages',
+      serviceValue: 'wedding',
       description: 'Complete photo and video packages tailored for your wedding day.',
       features: [
         'Full day coverage',
@@ -36,6 +41,7 @@ function Services() {
     {
       id: 4,
       title: 'Sports Photography',
+      serviceValue: 'sports',
       description: 'Action-packed sports photography capturing every winning moment.',
       features: [
         'Fast action shots',
@@ -47,6 +53,7 @@ function Services() {
     {
       id: 5,
       title: 'Corporate Events',
+      serviceValue: 'corporate',
       description: 'Professional documentation of conferences, meetings, and corporate gatherings.',
       features: [
         'Conference coverage',
@@ -58,6 +65,7 @@ function Services() {
     {
       id: 6,
       title: 'Custom Packages',
+      serviceValue: 'custom',
       description: 'Tailored solutions designed specifically for your unique needs.',
       features: [
         'Flexible scheduling',
@@ -89,7 +97,9 @@ function Services() {
                   </li>
                 ))}
               </ul>
-              <button className="service-btn">Get Quote</button>
+              <Link to={`/contact?service=${service.serviceValue}`} className="service-btn">
+                Get Quote
+              </Link>
             </div>
           </div>
         ))}
@@ -98,7 +108,7 @@ function Services() {
       <div className="services-cta">
         <h2>Ready to Work Together?</h2>
         <p>Contact us today to discuss your project and get a custom quote</p>
-        <button className="cta-button">Contact Us</button>
+        <Link to="/contact" className="cta-button">Contact Us</Link>
       </div>
     </div>
   )

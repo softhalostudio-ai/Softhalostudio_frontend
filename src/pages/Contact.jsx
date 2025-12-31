@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 const API_URL = `${import.meta.env.VITE_API_URL}/contact`;
 
 function Contact() {
+  const [searchParams] = useSearchParams();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -12,6 +14,17 @@ function Contact() {
   })
   const [submitting, setSubmitting] = useState(false)
   const [submitMessage, setSubmitMessage] = useState({ text: '', type: '' })
+
+  // Pre-select service from URL parameter
+  useEffect(() => {
+    const serviceParam = searchParams.get('service');
+    if (serviceParam) {
+      setFormData(prev => ({
+        ...prev,
+        service: serviceParam
+      }));
+    }
+  }, [searchParams]);
 
   const handleChange = (e) => {
     setFormData({
