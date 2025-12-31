@@ -1,5 +1,6 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import Home from './pages/Home'
 import Portfolio from './pages/Portfolio'
 import Services from './pages/Services'
@@ -9,10 +10,25 @@ import Login from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 
+function PageTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (typeof window.gtag !== 'undefined') {
+      window.gtag('config', 'G-XXXXXXXXXX', {
+        page_path: location.pathname + location.search,
+      });
+    }
+  }, [location]);
+
+  return null;
+}
+
 function App() {
   return (
     <AuthProvider>
       <Router>
+        <PageTracker />
         <div className="app">
         <nav className="navbar">
           <div className="nav-container">
