@@ -1,8 +1,16 @@
 import { PrismaClient } from '@prisma/client';
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
 const prisma = new PrismaClient();
-const resend = new Resend(process.env.RESEND_API_KEY);
+
+// Create email transporter using Gmail
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
 
 // CORS headers
 function setCorsHeaders(res) {
@@ -47,21 +55,32 @@ export default async function handler(req, res) {
 
     // Send email notification to softhalostudio@gmail.com
     try {
-      await resend.emails.send({
-        from: 'Soft Halo Studio <onboarding@resend.dev>',
-        to: ['softhalostudio@gmail.com'],
+      await transporter.sendMail({
+        from: `"Soft Halo Studio Website" <${process.env.EMAIL_USER}>`,
+        to: 'softhalostudio@gmail.com',
         subject: `New Contact Form Submission from ${name}`,
         html: `
-          <h2>New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
-          ${service ? `<p><strong>Service Interested In:</strong> ${service}</p>` : ''}
-          <p><strong>Message:</strong></p>
-          <p>${message}</p>
-          <hr>
-          <p><small>This message was sent via the contact form on your website.</small></p>
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #26a69a; border-bottom: 2px solid #26a69a; padding-bottom: 10px;">
+              New Contact Form Submission
+            </h2>
+            <div style="background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin: 20px 0;">
+              <p><strong>Name:</strong> ${name}</p>
+              <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+              ${phone ? `<p><strong>Phone:</strong> <a href="tel:${phone}">${phone}</a></p>` : ''}
+              ${service ? `<p><strong>Service Interested In:</strong> ${service}</p>` : ''}
+            </div>
+            <div style="margin: 20px 0;">
+              <p><strong>Message:</strong></p>
+              <p style="background-color: #fff; padding: 15px; border-left: 4px solid #26a69a;">${message}</p>
+            </div>
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+            <p style="color: #666; font-size: 12px;">
+              This message was sent via the contact form on your website.
+            </p>
+          </div>
         `,
+        replyTo: email,
       });
       console.log('Email sent successfully to softhalostudio@gmail.com');
     } catch (emailError) {
