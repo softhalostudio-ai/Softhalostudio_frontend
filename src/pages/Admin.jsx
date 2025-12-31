@@ -447,11 +447,13 @@ export default function Admin() {
                       </div>
                     ) : (
                       <>
-                        <h3>{image.title || 'Untitled'}</h3>
-                        {image.description && <p>{image.description}</p>}
-                        <div className="image-meta">
-                          <span className="category-badge">{image.category}</span>
-                          <span className="order-badge">Order: {image.displayOrder}</span>
+                        <div className="image-details">
+                          <h3>{image.title || 'Untitled'}</h3>
+                          {image.description && <p>{image.description}</p>}
+                          <div className="image-meta">
+                            <span className="category-badge">{image.category}</span>
+                            <span className="order-badge">Order: {image.displayOrder}</span>
+                          </div>
                         </div>
                         <div className="card-actions">
                           <button
